@@ -1,0 +1,61 @@
+<div class="row">
+  <div class="col-xs-12 col-md-6 col-md-offset-3">
+    <h3>Order Delivery</h3>
+    <!-- <div class="alert alert-danger" *ngIf="error">
+      <h3>Incorrect password</h3>
+      <p>{{ error }}</p>
+    </div> -->
+    <form #loginForm="ngForm" >
+      <div class="form-group">
+        <label for="sender">{{ fields.senderName | uppercase}}</label>
+        <input
+          type="text"
+          id="sender_name"
+          class="form-control"
+          ngModel
+          name="sender"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="password">{{fields.senderPhone | uppercase}}</label>
+        <input
+          type="text"
+          id="phone"
+          class="form-control"
+          ngModel
+          name="phone"
+          required
+          minlength="6"
+        />
+        <label for="sender">{{ fields.pickupAddress | uppercase}}</label>
+        <input
+          type="text"
+          id="sender_name"
+          class="form-control"
+          ngModel
+          name="sender"
+          required
+        />
+        <label for="sender">{{ fields.senderName | uppercase}}</label>
+        <input
+          type="text"
+          id="sender_name"
+          class="form-control"
+          ngModel
+          name="sender"
+          required
+        />
+
+
+
+
+      </div>
+      <div>
+        <button class="btn btn-primary" type="submit" [disabled]="!loginForm.valid">Submit</button>
+      </div>
+    </form>
+
+
+  </div>
+</div>
