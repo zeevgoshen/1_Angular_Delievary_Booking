@@ -1,13 +1,18 @@
 <div class="row">
   <div class="col-xs-12 col-md-6 col-md-offset-3">
-    <h3>Order Delivery</h3>
-    <!-- <div class="alert alert-danger" *ngIf="error">
-      <h3>Incorrect password</h3>
+    <h1>{{ strings.mainTitle }}</h1>
+    <hr />
+    <div class="alert alert-danger" *ngIf="error">
       <p>{{ error }}</p>
-    </div> -->
-    <form #loginForm="ngForm" >
+    </div>
+
+    <form #createForm="ngForm" (ngSubmit)="onSubmit(createForm)">
+      <h3>
+        <b>{{ strings.senderTitle }}</b>
+      </h3>
+
       <div class="form-group">
-        <label for="sender">{{ fields.senderName | uppercase}}</label>
+        <label for="sender">{{ strings.senderName | uppercase }}</label>
         <input
           type="text"
           id="sender_name"
@@ -17,18 +22,56 @@
           required
         />
       </div>
-      <div class="form-group">
-        <label for="password">{{fields.senderPhone | uppercase}}</label>
-        <input
-          type="text"
-          id="phone"
-          class="form-control"
-          ngModel
+
+      <label for="password">{{ strings.senderPhone | uppercase }}</label>
+
+      <!-- <PhoneNumber id="1"></PhoneNumber> -->
+      <form #f_sender="ngForm" [formGroup]="phoneForm_sender">
+        <ngx-intl-tel-input
+          [cssClass]="''"
+          [preferredCountries]="preferredCountries"
+          [enableAutoCountrySelect]="true"
+          [enablePlaceholder]="true"
+          [searchCountryFlag]="true"
+          [searchCountryField]="[
+            SearchCountryField.Iso2,
+            SearchCountryField.Name
+          ]"
+          [selectFirstCountry]="false"
+          [selectedCountryISO]="CountryISO.Israel"
+          [maxLength]="15"
+          [phoneValidation]="true"
+          [separateDialCode]="separateDialCode"
+          [numberFormat]="PhoneNumberFormat.National"
           name="phone"
-          required
-          minlength="6"
-        />
-        <label for="sender">{{ fields.pickupAddress | uppercase}}</label>
+          formControlName="phone"
+        >
+        </ngx-intl-tel-input>
+      </form>
+      <!-- <br />
+          <div>
+            <strong>Is input valid:</strong>
+            <pre>{{ !f.form.controls['phone'].invalid }}</pre>
+          </div>
+          <div>
+            <strong>Is input touched:</strong>
+            <pre>{{ f.form.controls['phone'].touched }}</pre>
+          </div>
+          <div>
+            <strong>Is form valid:</strong>
+            <pre>{{ f.form.valid }}</pre>
+          </div>
+          <div>
+            <strong>Form value:</strong>
+            <pre>{{ f.form.value | json }}</pre>
+          </div>
+          <div>
+            <strong>Form validation errors:</strong>
+            <pre>{{ f.form.controls['phone'].errors | json }}</pre>
+          </div> -->
+
+      <div class="wrapper">
+        <label for="sender">{{ strings.pickupAddress | uppercase }}</label>
         <input
           type="text"
           id="sender_name"
@@ -37,25 +80,120 @@
           name="sender"
           required
         />
-        <label for="sender">{{ fields.senderName | uppercase}}</label>
-        <input
-          type="text"
-          id="sender_name"
-          class="form-control"
-          ngModel
-          name="sender"
-          required
-        />
-
-
-
-
+        <mat-form-field>
+          <mat-label>{{ strings.city | uppercase }}</mat-label>
+          <mat-select [(value)]="selectedCity">
+            <mat-option *ngFor="let city of loadedCities" [value]="city.enName">
+              {{ city.enName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
-      <div>
-        <button class="btn btn-primary" type="submit" [disabled]="!loginForm.valid">Submit</button>
+
+      <hr />
+      <h3>
+        <b>{{ strings.receiverTitle }}</b>
+      </h3>
+      <label for="receiver">{{ strings.receiverName | uppercase }}</label>
+      <input
+        type="text"
+        id="receiver_name"
+        class="form-control"
+        ngModel
+        name="receiver"
+        required
+      />
+      <div class="wrapper">
+        <label for="receiver">{{ strings.receiverPhone | uppercase }}</label>
+        <form #f_receiver="ngForm" [formGroup]="phoneForm_receiver">
+          <ngx-intl-tel-input
+            [cssClass]="''"
+            [preferredCountries]="preferredCountries"
+            [enableAutoCountrySelect]="true"
+            [enablePlaceholder]="true"
+            [searchCountryFlag]="true"
+            [searchCountryField]="[
+              SearchCountryField.Iso2,
+              SearchCountryField.Name
+            ]"
+            [selectFirstCountry]="false"
+            [selectedCountryISO]="CountryISO.Israel"
+            [maxLength]="15"
+            [phoneValidation]="true"
+            [separateDialCode]="separateDialCode"
+            [numberFormat]="PhoneNumberFormat.National"
+            name="phone"
+            formControlName="phone"
+          >
+          </ngx-intl-tel-input>
+        </form>
+      </div>
+      <div class="wrapper">
+        <label for="receiver">{{ strings.dropOffAddress | uppercase }}</label>
+        <input
+          type="text"
+          id="receiver_name"
+          class="form-control"
+          ngModel
+          name="receiver"
+          required
+        />
+
+        <mat-form-field>
+          <mat-label>{{ strings.city | uppercase }}</mat-label>
+          <mat-select [(value)]="selectedCity">
+            <mat-option *ngFor="let city of loadedCities" [value]="city.enName">
+              {{ city.enName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- <p>
+        Selected Value: {{selectedCity}}
+      </p> -->
+
+      <hr />
+      <h3>
+        <b>{{ strings.scheduleTitle }}</b>
+      </h3>
+      <mat-form-field appearance="outline">
+        <input
+          matInput
+          [min]="minDate"
+          formControlName="releasedAt"
+          [matDatepickerFilter]="dateFilter"
+          [matDatepicker]="releasedAtPicker"
+          (click)="releasedAtPicker.open()"
+          (dateInput)="addEvent('input', $event)"
+          (dateChange)="addEvent('change', $event)"
+        />
+
+        <mat-datepicker-toggle matSuffix [for]="releasedAtPicker">
+        </mat-datepicker-toggle>
+
+        <mat-datepicker #releasedAtPicker> </mat-datepicker>
+      </mat-form-field>
+
+      <br />
+
+      <mat-form-field>
+        <mat-label>{{ strings.deliveryTime }}</mat-label>
+        <mat-select [(value)]="selectedTime">
+          <mat-option *ngFor="let hour of loadedHours" [value]="hour.times">
+            {{ hour.times }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <div class="wrapper">
+        <button
+          class="btn btn-primary"
+          type="submit"
+          [disabled]="!createForm.valid"
+        >
+          Submit
+        </button>
       </div>
     </form>
-
-
   </div>
 </div>

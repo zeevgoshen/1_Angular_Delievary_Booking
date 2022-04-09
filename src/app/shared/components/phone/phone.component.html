@@ -1,0 +1,28 @@
+<form #f="ngForm" [formGroup]="phoneForm" #newItem (ngOnChange)="onChange()">
+
+  <ngx-intl-tel-input
+    [cssClass]="'phoneSize'"
+    [preferredCountries]="preferredCountries"
+    [enableAutoCountrySelect]="true"
+    [enablePlaceholder]="true"
+    [searchCountryFlag]="true"
+    [searchCountryField]="[
+      SearchCountryField.Iso2,
+      SearchCountryField.Name
+    ]"
+    [selectFirstCountry]="false"
+    [selectedCountryISO]="CountryISO.Israel"
+    [maxLength]="15"
+    [phoneValidation]="true"
+    [separateDialCode]="separateDialCode"
+    [numberFormat]="PhoneNumberFormat.National"
+    name="phone"
+    formControlName="phone"
+     
+  >
+  </ngx-intl-tel-input>
+</form>
+<div>
+
+  <span *ngIf="!f.form.valid && f.form.controls['phone'].touched">not valid</span>
+</div>

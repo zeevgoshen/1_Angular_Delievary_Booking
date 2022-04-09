@@ -1,13 +1,13 @@
 <div class="row">
   <div class="col-xs-12 col-md-6 col-md-offset-3">
-    <h3>Login</h3>
+    <h3>{{ this.strings.loginTitle }}</h3>
     <div class="alert alert-danger" *ngIf="error">
-      <h3>Incorrect password</h3>
+      <h3>{{ this.strings.incorrectPassword }}</h3>
       <p>{{ error }}</p>
     </div>
     <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
       <div class="form-group">
-        <label for="email">E-Mail</label>
+        <label for="email">{{ this.strings.email }}</label>
         <input
           type="email"
           id="email"
@@ -19,7 +19,7 @@
         />
       </div>
       <div class="form-group">
-        <label for="password">Password</label>
+        <label for="password">{{ this.strings.password }}</label>
         <input
           type="password"
           id="password"
@@ -31,10 +31,14 @@
         />
       </div>
       <div>
-        <button class="btn btn-primary" type="submit" [disabled]="!loginForm.valid">Login</button>
+        <button
+          class="btn btn-primary"
+          type="submit"
+          [disabled]="!loginForm.valid"
+        >
+          {{ this.strings.login }}
+        </button>
       </div>
     </form>
-
-
   </div>
 </div>
