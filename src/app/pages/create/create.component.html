@@ -61,7 +61,7 @@
         />
         <mat-form-field>
           <mat-label>{{ strings.city | uppercase }}</mat-label>
-          <mat-select [(value)]="selectedCity">
+          <mat-select [(value)]="onSenderSelectedCity">
             <mat-option *ngFor="let city of loadedCities" [value]="city.enName">
               {{ city.enName }}
             </mat-option>
@@ -120,7 +120,7 @@
 
         <mat-form-field>
           <mat-label>{{ strings.city | uppercase }}</mat-label>
-          <mat-select [(value)]="selectedCity">
+          <mat-select [(value)]="onReceiverSelectedCity">
             <mat-option *ngFor="let city of loadedCities" [value]="city.enName">
               {{ city.enName }}
             </mat-option>

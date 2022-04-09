@@ -10,12 +10,14 @@ import {
   PhoneNumberFormat,
 } from 'ngx-intl-tel-input';
 import { CitiesResponseData, CitiesService } from '../services/cities.service';
-import { Observable } from 'rxjs';
+import { Observable, Subject, from } from 'rxjs';
 import {
   ScheduleResponseData,
   ScheduleService,
 } from '../services/schedule.service';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+
+const subject = new Subject<ScheduleResponseData>();
 
 @Component({
   selector: 'app-create',
@@ -24,14 +26,17 @@ import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 })
 export class CreateComponent {
   loadedCities: CitiesResponseData[] = [];
+  allLoadedHours: ScheduleResponseData[] = [];
   loadedHours: ScheduleResponseData[] = [];
   filteredLoadedHours: ScheduleResponseData[] = [];
   events: string[] = [];
   strings = STRINGS;
   error = '';
   minDate = new Date();
-  selectedCity?: CitiesResponseData;
+  sender_City?: CitiesResponseData;
+  receiver_City?: CitiesResponseData;
   selectedTime?: ScheduleResponseData;
+
   constructor(
     private citiesService: CitiesService,
     private scheduleService: ScheduleService
@@ -51,63 +56,62 @@ export class CreateComponent {
     receiver_phone: new FormControl(undefined, [Validators.required]),
   });
 
-
+  hoursArray = [];
 
   datePicker = new FormGroup({
-    releasedAt: new FormControl()
-});
-  // onChange() {
-  //   this.phoneForm_sender.valueChanges.subscribe((selectedValue) => {
-  //     if (this.phoneForm_sender.valid) {
-  //       this.error = '';
-  //     }
-  //     // console.log('form value changed')
+    releasedAt: new FormControl(),
+  });
 
-  //     // console.log(selectedValue)
-  //   });
-  // }
-
-  onSelect(city: CitiesResponseData): void {
-    this.selectedCity = city;
+  onSenderSelectedCity(city: CitiesResponseData): void {
+    this.sender_City = city;
   }
+
+  onReceiverSelectedCity(city: CitiesResponseData): void {
+    this.receiver_City = city;
+  }
+
   ngOnInit() {
-    // this.phoneForm_sender.valueChanges.subscribe((selectedValue) => {
-    //   if (this.phoneForm_sender.valid) {
-    //     this.error = '';
-    //   }
-    // });
+    if (this.loadedCities.length === 0) {
+      let citiesArray = this.citiesService.getCities().subscribe((cities) => {
+        this.loadedCities = cities;
+      });
+    }
 
-    let citiesArray = this.citiesService.getCities().subscribe((cities) => {
-      this.loadedCities = cities;
-      //console.log('cities' + cities);
+    if (this.loadedHours.length === 0) {
+      let hoursArray = this.scheduleService.getHours().subscribe((hours) => {
+        this.loadedHours = hours;
+        this.allLoadedHours = hours;
+      });
+    }
+
+    subject.subscribe({
+      next: (v) => (this.loadedHours = this.filteredLoadedHours),
     });
-
-    let hoursArray = this.scheduleService.getHours().subscribe((hours) => {
-      this.loadedHours = hours;
-      //console.log('cities' + hours);
-
-      //this.filteredLoadedHours = this.loadedHours.filter(day => day.day === sele)
-    });
-
-    // citiesObs.subscribe(
-    //   (resData) => {
-    //     console.log(resData.res);
-    //     if (resData.res === this.strings.unknownRequestResponse){
-    //       this.error = this.strings.unknownRequestResponse;
-    //     } else {
-
-    //     }
-    //   },
-    //   (errorMessage) => {
-    //     console.log(errorMessage.res);
-    //   }
-    // );
-    //form.reset();
   }
 
   addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
+    this.events = [];
     this.events.push(`${type}: ${event.value}`);
+
+    let pickerDate = new Date(this.events.toLocaleString());
+
+    if (this.loadedHours.length === 1 || this.loadedHours.length === 0) {
+      this.filteredLoadedHours = this.allLoadedHours.filter(
+        (day) => day.day == this.getDayName(pickerDate, 'en-US')
+      );
+    } else {
+      this.filteredLoadedHours = this.loadedHours.filter(
+        (day) => day.day == this.getDayName(pickerDate, 'en-US')
+      );
+    }
+
+    subject.next(this.filteredLoadedHours[0]);
   }
+
+  getDayName = (dateStr: Date, locale: string) => {
+    var date = new Date(dateStr);
+    return date.toLocaleDateString(locale, { weekday: 'short' });
+  };
 
   dateFilter: (date: Date | null) => boolean = (date: Date | null) => {
     if (!date) {
@@ -123,10 +127,7 @@ export class CreateComponent {
       return;
     } else {
       this.error = '';
+      //form.reset();
     }
-  }
-
-  changePreferredCountries() {
-    this.preferredCountries = [CountryISO.Israel];
   }
 }
