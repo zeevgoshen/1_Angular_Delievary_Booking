@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, throwError } from 'rxjs';
+import { catchError, throwError, TimeoutError } from 'rxjs';
 
 export interface OrderResponseData {
   id: string;
@@ -17,10 +17,13 @@ export class LoginService {
 
     let apiUrl = 'https://mock-stg.getpackage-dev.com/submit';
     return this.http.post<OrderResponseData>(apiUrl, {
-
-      //,returnSecureToken: true,
     })
-    //.pipe(catchError(this.handleError));
+    .pipe(catchError((error) => {
+      if (error instanceof TimeoutError) {
+        return throwError('Timeout Exception');
+     }
+     return throwError(error.message);
+    }));
   }
 
   // private handleError(errorRes: HttpErrorResponse) {

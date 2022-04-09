@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { map, catchError, throwError } from 'rxjs';
+import { map, catchError, throwError, TimeoutError } from 'rxjs';
 
 
 export interface ScheduleResponseData {
@@ -26,5 +26,11 @@ export class ScheduleService {
       }
       return hoursArray;
     }))
+    .pipe(catchError((error) => {
+      if (error instanceof TimeoutError) {
+        return throwError('Timeout Exception');
+     }
+     return throwError(error.message);
+    }));
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, throwError } from 'rxjs';
+import { catchError, throwError, TimeoutError } from 'rxjs';
+
 
 export interface LoginResponseData {
   id: string;
@@ -18,21 +19,13 @@ export class LoginService {
     return this.http.post<LoginResponseData>(apiUrl, {
       email: email,
       password: password
-      //,returnSecureToken: true,
     })
-    //.pipe(catchError(this.handleError));
+    .pipe(catchError((error) => {
+      if (error instanceof TimeoutError) {
+        return throwError('Timeout Exception');
+     }
+     return throwError(error.message);
+    }));
   }
 
-  // private handleError(errorRes: HttpErrorResponse) {
-  //   let errorMessage = 'An unknown error occured';
-  //   if (!errorRes.error || !errorRes.error.error) {
-  //     return throwError(errorMessage);
-  //   }
-  //   switch(errorRes.error.error.message){
-  //     case 'unknown request':
-  //       errorMessage = 'adsds';
-
-  //   }
-  //   return throwError(errorMessage);
-  // }
 }

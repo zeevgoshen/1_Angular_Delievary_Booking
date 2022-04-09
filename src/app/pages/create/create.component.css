@@ -1,31 +1,4 @@
-.phoneSize{
-  width:500px !important;
-}
-
 .wrapper{
   padding-top: 10px;
   padding-bottom: 10px;
-}
-h3{
-  color: darkblue;
-}
-
-
-.priceQuote {
-  margin-left:20px;
-  float: right;
-  line-height:20px;
-  padding:5px;
-  font-size: 20px;
-}
-.priceLabel{
-  float: right;padding:5px;
-  font-size: 20px;
-  line-height:20px;
-}
-.quoteArea
-{
-    width: 150px;
-    height: 100px;
-    float: right;
 }

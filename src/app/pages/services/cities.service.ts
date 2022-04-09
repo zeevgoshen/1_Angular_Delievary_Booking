@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { map, catchError, throwError } from 'rxjs';
+import { map, catchError, throwError, TimeoutError } from 'rxjs';
 
 
 export interface CitiesResponseData {
   id: string;
-  price: string;
+  price: number;
   enName: string;
   hebName: string;
 }
@@ -27,6 +27,12 @@ export class CitiesService {
       }
       return citiesArray;
     }))
+    .pipe(catchError((error) => {
+      if (error instanceof TimeoutError) {
+        return throwError('Timeout Exception');
+     }
+     return throwError(error.message);
+    }));
   }
 
 
