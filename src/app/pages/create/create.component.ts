@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-
+import { CookieService } from 'ngx-cookie-service';
 import { STRINGS } from 'src/app/constants/strings';
 
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -16,6 +16,7 @@ import {
   ScheduleService,
 } from '../services/schedule.service';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+
 
 const subject = new Subject<ScheduleResponseData>();
 
@@ -39,7 +40,8 @@ export class CreateComponent {
 
   constructor(
     private citiesService: CitiesService,
-    private scheduleService: ScheduleService
+    private scheduleService: ScheduleService,
+    private cookieService: CookieService
   ) {}
 
   separateDialCode = false;
@@ -71,21 +73,36 @@ export class CreateComponent {
   }
 
   ngOnInit() {
-    if (this.loadedCities.length === 0) {
+
+    if (!this.cookieService.check(this.strings.getCitiesCookie)) {
       let citiesArray = this.citiesService.getCities().subscribe((cities) => {
         this.loadedCities = cities;
+        this.cookieService.set(this.strings.getCitiesCookie, JSON.stringify(cities), {expires:2});
       });
+    } else {
+      this.loadedCities = JSON.parse(this.cookieService.get(this.strings.getCitiesCookie));
     }
 
-    if (this.loadedHours.length === 0) {
+    if (!this.cookieService.check(this.strings.getHoursCookie)) {
       let hoursArray = this.scheduleService.getHours().subscribe((hours) => {
+        this.cookieService.set(this.strings.getHoursCookie, JSON.stringify(hours), {expires:2});
         this.loadedHours = hours;
         this.allLoadedHours = hours;
       });
+    } else {
+      this.loadedHours = JSON.parse(this.cookieService.get(this.strings.getHoursCookie));
+      this.allLoadedHours = JSON.parse(this.cookieService.get(this.strings.getHoursCookie));
     }
 
     subject.subscribe({
-      next: (v) => (this.loadedHours = this.filteredLoadedHours),
+      next: (v) => this.loadedHours = this.filteredLoadedHours
+
+      // Schedule Times drop down
+      //
+      //
+      // parse (split (',')) to separate times.
+      //.pipe(map(items => .times.map(.split(' '))))) )
+
     });
   }
 
@@ -127,7 +144,14 @@ export class CreateComponent {
       return;
     } else {
       this.error = '';
-      //form.reset();
+
+      alert(this.strings.submitForm);
+      // retreive token cookie
+      let token = this.cookieService.get(this.strings.cookieName);
+      // use post service to send order
+      // show success modal/message
+
+      form.reset();
     }
   }
 }

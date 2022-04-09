@@ -7,6 +7,8 @@ export const STRINGS =
   incorrectPassword:'Incorrect password',
   login:'Login',
   cookieName:'getpackage',
+  getCitiesCookie:'getCities',
+  getHoursCookie:'getHours',
   unknownRequestResponse:'unknown request',
 
   // order form
@@ -25,5 +27,7 @@ export const STRINGS =
   dropOffAddress: 'Drop-off address',
   city: 'City',
   deliveryTime: 'Delivery time',
-  scheduleTitle: 'Schedule'
+  scheduleTitle: 'Schedule',
+
+  submitForm:'Form Submitted.'
 };

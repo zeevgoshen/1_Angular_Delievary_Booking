@@ -46,11 +46,10 @@ export class LoginComponent {
 
     loginObs.subscribe(
       (resData) => {
-        console.log(resData.res);
         if (resData.res === this.strings.unknownRequestResponse){
           this.error = this.strings.unknownRequestResponse;
         } else {
-          this.cookieService.set(this.strings.cookieName, resData.token);
+          this.cookieService.set(this.strings.cookieName, resData.token, {expires:2});
           //console.log('Success ! cookie - ' + this.cookieService.get(this.strings.cookieName));
           this.router.navigate(['/create']);
         }
