@@ -10,7 +10,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { PhoneComponent } from './shared/components/phone/phone.component';
 import { StoreModule } from '@ngrx/store';
 import { counterReducer } from './shared/store/reducers/counter.reducer';
 import { MyCounterComponent } from './my-counter/my-counter.component';
@@ -31,7 +30,6 @@ const appRoutes: Routes = [
     AppComponent,
     LoginComponent,
     CreateComponent,
-    PhoneComponent,
     MyCounterComponent
   ],
   imports: [

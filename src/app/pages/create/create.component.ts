@@ -44,13 +44,18 @@ export class CreateComponent {
   preferredCountries: CountryISO[] = [CountryISO.Israel];
 
   phoneForm_sender = new FormGroup({
-    phone: new FormControl(undefined, [Validators.required]),
+    sender_phone: new FormControl(undefined, [Validators.required]),
   });
 
   phoneForm_receiver = new FormGroup({
-    phone: new FormControl(undefined, [Validators.required]),
+    receiver_phone: new FormControl(undefined, [Validators.required]),
   });
 
+
+
+  datePicker = new FormGroup({
+    releasedAt: new FormControl()
+});
   // onChange() {
   //   this.phoneForm_sender.valueChanges.subscribe((selectedValue) => {
   //     if (this.phoneForm_sender.valid) {
@@ -66,11 +71,11 @@ export class CreateComponent {
     this.selectedCity = city;
   }
   ngOnInit() {
-    this.phoneForm_sender.valueChanges.subscribe((selectedValue) => {
-      if (this.phoneForm_sender.valid) {
-        this.error = '';
-      }
-    });
+    // this.phoneForm_sender.valueChanges.subscribe((selectedValue) => {
+    //   if (this.phoneForm_sender.valid) {
+    //     this.error = '';
+    //   }
+    // });
 
     let citiesArray = this.citiesService.getCities().subscribe((cities) => {
       this.loadedCities = cities;

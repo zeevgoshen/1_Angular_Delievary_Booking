@@ -31,12 +31,6 @@ export class LoginComponent {
   }
   onSubmit(form: NgForm) {
 
-    // if (this.cookieService.check(this.strings.cookieName)){
-    //   //console.log('Cookie found');
-    //   this.router.navigate(['/create']);
-    //   return;
-    // }
-
     // extra validation if form.valid
     // been tempered in dev tools
     if (!form.valid) {
