@@ -17,7 +17,6 @@ import {
 } from '../services/schedule.service';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
-
 const subject = new Subject<ScheduleResponseData>();
 
 @Component({
@@ -73,36 +72,42 @@ export class CreateComponent {
   }
 
   ngOnInit() {
-
     if (!this.cookieService.check(this.strings.getCitiesCookie)) {
       let citiesArray = this.citiesService.getCities().subscribe((cities) => {
         this.loadedCities = cities;
-        this.cookieService.set(this.strings.getCitiesCookie, JSON.stringify(cities), {expires:2});
+        this.cookieService.set(
+          this.strings.getCitiesCookie,
+          JSON.stringify(cities),
+          { expires: 2 }
+        );
       });
     } else {
-      this.loadedCities = JSON.parse(this.cookieService.get(this.strings.getCitiesCookie));
+      this.loadedCities = JSON.parse(
+        this.cookieService.get(this.strings.getCitiesCookie)
+      );
     }
 
     if (!this.cookieService.check(this.strings.getHoursCookie)) {
       let hoursArray = this.scheduleService.getHours().subscribe((hours) => {
-        this.cookieService.set(this.strings.getHoursCookie, JSON.stringify(hours), {expires:2});
+        this.cookieService.set(
+          this.strings.getHoursCookie,
+          JSON.stringify(hours),
+          { expires: 2 }
+        );
         this.loadedHours = hours;
         this.allLoadedHours = hours;
       });
     } else {
-      this.loadedHours = JSON.parse(this.cookieService.get(this.strings.getHoursCookie));
-      this.allLoadedHours = JSON.parse(this.cookieService.get(this.strings.getHoursCookie));
+      this.loadedHours = JSON.parse(
+        this.cookieService.get(this.strings.getHoursCookie)
+      );
+      this.allLoadedHours = JSON.parse(
+        this.cookieService.get(this.strings.getHoursCookie)
+      );
     }
 
     subject.subscribe({
-      next: (v) => this.loadedHours = this.filteredLoadedHours
-
-      // Schedule Times drop down
-      //
-      //
-      // parse (split (',')) to separate times.
-      //.pipe(map(items => .times.map(.split(' '))))) )
-
+      next: (v) => (this.loadedHours = this.filteredLoadedHours),
     });
   }
 

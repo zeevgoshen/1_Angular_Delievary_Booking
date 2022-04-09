@@ -14,9 +14,7 @@ export class ScheduleService {
   constructor(private http: HttpClient) {}
 
   getHours() {
-    let apiUrl = ' https://mock-stg.getpackage-dev.com/times';
-
-
+    let apiUrl = 'https://mock-stg.getpackage-dev.com/times';
     return this.http.get<{[key:string]: ScheduleResponseData}>(apiUrl)
     .pipe(
       map(responseData => {

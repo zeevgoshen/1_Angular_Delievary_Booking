@@ -10,6 +10,7 @@ export const STRINGS =
   getCitiesCookie:'getCities',
   getHoursCookie:'getHours',
   unknownRequestResponse:'unknown request',
+  redirectToCreate:'/create',
 
   // order form
   mainTitle: 'Order Delivery',

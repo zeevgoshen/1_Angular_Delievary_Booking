@@ -53,10 +53,10 @@
         <label for="sender">{{ strings.pickupAddress | uppercase }}</label>
         <input
           type="text"
-          id="sender_name"
+          id="sender_address"
           class="form-control"
           ngModel
-          name="sender"
+          name="senderAddress"
           required
         />
         <mat-form-field>
@@ -110,10 +110,10 @@
         <label for="receiver">{{ strings.dropOffAddress | uppercase }}</label>
         <input
           type="text"
-          id="receiver_name"
+          id="receiver_address"
           class="form-control"
           ngModel
-          name="receiver"
+          name="receiverAddress"
           required
         />
 
@@ -160,16 +160,20 @@
       </mat-form-field>
 
       <div class="wrapper">
-        <button
-          class="btn btn-primary"
-          type="submit"
-          [disabled]="!createForm.valid"
-        >
-          Submit
-        </button>
 
-        <label for="quote" class="priceQuote">xxx</label>
-        <label for="quoteLabel" class="priceLabel">Price:</label>
+          <button
+            class="btn btn-primary"
+            type="submit"
+            [disabled]="!createForm.valid"
+          >
+            Submit
+          </button>
+        <div class="quoteArea" stytle="align:center">
+          <label for="quote" class="priceQuote">xxx</label>
+          <label for="quoteLabel" class="priceLabel">Price:</label>
+          <label for="quote" class="priceQuote">xxx</label>
+          <label for="quoteLabel" class="priceLabel">Vat:</label>
+        </div>
       </div>
     </form>
   </div>

@@ -12,12 +12,9 @@ export interface LoginResponseData {
 export class LoginService {
   constructor(private http: HttpClient) {}
 
-  //error = null;
-
   signin(email: string, password: string) {
 
     let apiUrl = 'https://mock-stg.getpackage-dev.com/login';
-    //let apiUrl = 'https://624f21d78c5bf4a10547173b.mockapi.io/login/';
     return this.http.post<LoginResponseData>(apiUrl, {
       email: email,
       password: password

@@ -1,35 +1,27 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { map, catchError, throwError } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
 
-
-export interface CitiesResponseData {
+export interface OrderResponseData {
   id: string;
-  price: string;
-  enName: string;
-  hebName: string;
+  token: string;
+  res: string;
 }
 
 @Injectable({ providedIn: 'root' })
-export class CitiesService {
+export class LoginService {
   constructor(private http: HttpClient) {}
 
-  getCities() {
-    let apiUrl = 'https://mock-stg.getpackage-dev.com/cities';
-    return this.http.get<{[key:string]: CitiesResponseData}>(apiUrl)
-    .pipe(
-      map(responseData => {
-      const citiesArray = [];
-      for (const key in responseData){
-        if (responseData.hasOwnProperty(key)){
-          citiesArray.push({...responseData[key], id: key});
-        }
-      }
-      return citiesArray;
-    }))
+
+  signin(email: string, password: string) {
+
+    let apiUrl = 'https://mock-stg.getpackage-dev.com/submit';
+    return this.http.post<OrderResponseData>(apiUrl, {
+
+      //,returnSecureToken: true,
+    })
+    //.pipe(catchError(this.handleError));
   }
-
-
 
   // private handleError(errorRes: HttpErrorResponse) {
   //   let errorMessage = 'An unknown error occured';

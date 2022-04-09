@@ -24,8 +24,7 @@ export class LoginComponent {
 
   ngOnInit(){
     if (this.cookieService.check(this.strings.cookieName)){
-      //console.log('Cookie found');
-      this.router.navigate(['/create']);
+      this.router.navigate([this.strings.redirectToCreate]);
       return;
     }
   }
@@ -50,8 +49,7 @@ export class LoginComponent {
           this.error = this.strings.unknownRequestResponse;
         } else {
           this.cookieService.set(this.strings.cookieName, resData.token, {expires:2});
-          //console.log('Success ! cookie - ' + this.cookieService.get(this.strings.cookieName));
-          this.router.navigate(['/create']);
+          this.router.navigate([this.strings.redirectToCreate]);
         }
       },
       (errorMessage) => {
