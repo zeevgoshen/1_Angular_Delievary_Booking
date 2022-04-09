@@ -13,8 +13,8 @@ to be reused by the sender and the receiver, since they have the same fields)
 
 3) Format the available times in Delivery-time drop down.
 
-
-4) Price calculation 
+4) Price calculation, compare with state if price needs to change when city change occurs.
+	// like in React, 2 params
 
 5) Submit
 

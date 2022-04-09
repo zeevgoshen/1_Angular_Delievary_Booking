@@ -5,7 +5,7 @@ import { map, catchError, throwError } from 'rxjs';
 
 export interface CitiesResponseData {
   id: string;
-  price: string;
+  price: number;
   enName: string;
   hebName: string;
 }

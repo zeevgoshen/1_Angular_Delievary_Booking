@@ -16,6 +16,7 @@ import {
   ScheduleService,
 } from '../services/schedule.service';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatSelectChange } from '@angular/material/select';
 
 const subject = new Subject<ScheduleResponseData>();
 
@@ -49,6 +50,9 @@ export class CreateComponent {
   PhoneNumberFormat = PhoneNumberFormat;
   preferredCountries: CountryISO[] = [CountryISO.Israel];
 
+  senderPrice = 0;
+  receiverPrice = 0;
+
   phoneForm_sender = new FormGroup({
     sender_phone: new FormControl(undefined, [Validators.required]),
   });
@@ -63,12 +67,21 @@ export class CreateComponent {
     releasedAt: new FormControl(),
   });
 
+  onCityChange(newCity: MatSelectChange){
+    console.log(newCity.value);
+    let price = this.loadedCities.filter(city => city.enName === newCity.value);
+
+    //price[0].price
+
+  }
   onSenderSelectedCity(city: CitiesResponseData): void {
     this.sender_City = city;
+    this.senderPrice = city.price;
   }
 
   onReceiverSelectedCity(city: CitiesResponseData): void {
     this.receiver_City = city;
+    this.receiverPrice = city.price;
   }
 
   ngOnInit() {
@@ -107,6 +120,8 @@ export class CreateComponent {
     }
 
     subject.subscribe({
+      // Correct times are shown according to the date,
+      // but needs parsing using map and split on ',' probably
       next: (v) => (this.loadedHours = this.filteredLoadedHours),
     });
   }
